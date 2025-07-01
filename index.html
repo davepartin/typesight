@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Practice for Kids</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            padding: 40px;
+            max-width: 900px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        
+        .font-size-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .font-size-toggle:hover {
+            background: #45a049;
+        }
+        
+        h1 {
+            color: #212529;
+            margin-bottom: 10px;
+            font-size: 2.8em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            color: #6c757d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .home-screen {
+            display: block;
+        }
+        
+        .drill-screen {
+            display: none;
+        }
+        
+        .completion-screen {
+            display: none;
+        }
+        
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .level-button {
+            background: linear-gradient(45deg, #495057, #6c757d);
+            color: white;
+            border: none;
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #dee2e6;
+        }
+        
+        .level-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #343a40, #495057);
+        }
+        
+        .word-display {
+            margin: 40px 0;
+        }
+        
+        .letter-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .letter-box {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #6c757d;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            background: white;
+            color: #212529;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .letter-box.filled {
+            background: #f8f9fa;
+            border-color: #495057;
+            color: #212529;
+        }
+        
+        .letter-box.current {
+            background: #e9ecef;
+            border-color: #343a40;
+            animation: pulse 1s infinite;
+        }
+        
+        .letter-box:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .instructions {
+            margin: 30px 0;
+            font-size: 1.1em;
+            color: #666;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .feedback {
+            font-size: 4em;
+            margin: 20px 0;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress {
+            margin: 20px 0;
+            font-size: 1.2em;
+            color: #495057;
+            font-weight: bold;
+        }
+        
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+        }
+        
+        .completion-message {
+            font-size: 1.5em;
+            color: #28a745;
+            margin: 30px 0;
+        }
+        
+        .large-check {
+            font-size: 6em;
+            color: #28a745;
+            margin: 20px 0;
+        }
+        
+        .mobile-controls {
+            display: none;
+            margin: 20px 0;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mobile-button {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            min-width: 120px;
+            touch-action: manipulation;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-button:active {
+            background: #343a40;
+            transform: scale(0.95);
+        }
+        
+        .hidden-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .letter-box {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5em;
+            }
+            
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+        
+        .arcade-complete {
+            display: none;
+            text-align: center;
+        }
+        
+        .final-time {
+            font-size: 3em;
+            color: #212529;
+            margin: 20px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .initials-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+        
+        .initial-box {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #495057;
+            border-radius: 10px;
+            font-size: 2em;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: white;
+        }
+        
+        .arcade-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .arcade-button {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .arcade-button:hover {
+            background: #343a40;
+            transform: translateY(-2px);
+        }
+        
+        .leaderboard {
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .leaderboard-header {
+            background: #343a40;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+            background: white;
+        }
+        
+        .leaderboard-entry:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .leaderboard-entry:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .rank {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .timer-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #495057;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .penalty-display {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .leaderboard-button {
+            position: absolute;
+            top: 20px;
+            left: 180px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .leaderboard-button:hover {
+            background: #5a6268;
+        }
+        .font-small {
+            font-size: 0.9em;
+        }
+        
+        .font-medium {
+            font-size: 1em;
+        }
+        
+        .font-large {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <button class="font-size-toggle" onclick="toggleFontSize()">Font Size</button>
+    <button class="leaderboard-button" onclick="showLeaderboards()">🏆 Scores</button>
+    
+    <div class="timer-display" id="timerDisplay" style="display: none;">
+        <div id="timeElapsed">Time: 0:00</div>
+        <div class="penalty-display" id="penaltyDisplay"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Home Screen -->
+        <div class="home-screen" id="homeScreen">
+            <h1>Practice Typing Sight-Words</h1>
+            <p class="subtitle">Master essential words through interactive typing practice</p>
+            
+            <div class="levels-grid" id="levelsGrid">
+                <!-- Levels will be generated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Drill Screen -->
+        <div class="drill-screen" id="drillScreen">
+            <div class="progress" id="progress"></div>
+            
+            <div class="word-display">
+                <div class="letter-boxes" id="letterBoxes"></div>
+                <input type="text" class="hidden-input" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+            
+            <div class="mobile-controls" id="mobileControls">
+                <button class="mobile-button" onclick="speakWord()">🔊 Speak</button>
+                <button class="mobile-button" onclick="giveHint()">💡 Hint</button>
+                <button class="mobile-button" onclick="checkWord()">✓ Check</button>
+                <button class="mobile-button" onclick="clearInput()">⌫ Clear</button>
+            </div>
+            
+            <div class="instructions">
+                <strong>Space</strong> = Speak word • <strong>Tab</strong> = Hint • <strong>Enter</strong> = Check • <strong>Backspace</strong> = Erase
+            </div>
+            
+            <div class="feedback" id="feedback"></div>
+            
+            <button class="back-button" onclick="goHome()">Back to Home</button>
+        </div>
+        
+        <!-- Arcade Completion Screen -->
+        <div class="arcade-complete" id="arcadeComplete">
+            <div class="large-check">🎉</div>
+            <h2 id="levelCompleteTitle">Level Complete!</h2>
+            <div class="final-time" id="finalTime"></div>
+            <div id="timeBreakdown"></div>
+            
+            <h3>Enter Your Initials:</h3>
+            <div class="initials-input">
+                <input type="text" class="initial-box" maxlength="1" id="initial1" oninput="moveToNext(this, 'initial2')">
+                <input type="text" class="initial-box" maxlength="1" id="initial2" oninput="moveToNext(this, 'initial3')">
+                <input type="text" class="initial-box" maxlength="1" id="initial3" oninput="submitScore()">
+            </div>
+            
+            <div class="arcade-buttons">
+                <button class="arcade-button" onclick="submitScore()">Save Score</button>
+                <button class="arcade-button" onclick="restartLevel()">Try Again</button>
+                <button class="arcade-button" onclick="goHome()">Home</button>
+            </div>
+        </div>
+        
+        <!-- Leaderboard Screen -->
+        <div class="leaderboard" id="leaderboardScreen">
+            <h2>🏆 Leaderboards</h2>
+            <div id="leaderboardContent"></div>
+            <button class="back-button" onclick="hideLeaderboards()">Back to Home</button>
+        </div>
+    </div>
+    
+    <script>
+        // Dolch sight words organized by educational progression
+        // Based on authentic Dolch word lists but organized for gradual difficulty increase
+        const wordLevels = [
+            // Level 1: Pre-K Foundation (40 words)
+            ["a", "and", "away", "big", "blue", "can", "come", "down", "find", "for", "funny", "go", "help", "here", "I", "in", "is", "it", "jump", "little", "look", "make", "me", "my", "not", "one", "play", "red", "run", "said", "see", "the", "three", "to", "two", "up", "we", "where", "yellow", "you"],
+            
+            // Level 2: Kindergarten Basics Part 1 (25 words)
+            ["all", "am", "are", "at", "ate", "be", "black", "brown", "but", "came", "did", "do", "eat", "four", "get", "good", "have", "he", "into", "like", "must", "new", "no", "now", "on"],
+            
+            // Level 3: Kindergarten Basics Part 2 (27 words)
+            ["our", "out", "please", "pretty", "ran", "ride", "saw", "say", "she", "so", "soon", "that", "there", "they", "this", "too", "under", "want", "was", "well", "went", "what", "white", "who", "will", "with", "yes"],
+            
+            // Level 4: First Grade Part 1 (25 words)
+            ["after", "again", "an", "any", "as", "ask", "by", "could", "every", "fly", "from", "give", "going", "had", "has", "her", "him", "his", "how", "just", "know", "let", "live", "may", "of"],
+            
+            // Level 5: First Grade Part 2 (16 words)
+            ["old", "once", "open", "over", "put", "round", "some", "stop", "take", "thank", "them", "then", "think", "walk", "were", "when"],
+            
+            // Level 6: Second Grade Part 1 (23 words)
+            ["always", "around", "because", "been", "before", "best", "both", "buy", "call", "cold", "does", "don't", "fast", "first", "five", "found", "gave", "goes", "green", "its", "made", "many", "off"],
+            
+            // Level 7: Second Grade Part 2 (22 words)
+            ["or", "pull", "read", "right", "sing", "sit", "sleep", "tell", "their", "these", "those", "upon", "us", "use", "very", "wash", "which", "why", "wish", "work", "would", "write", "your"],
+            
+            // Level 8: Third Grade Part 1 (20 words)
+            ["about", "better", "bring", "carry", "clean", "cut", "done", "draw", "drink", "eight", "fall", "far", "full", "got", "grow", "hold", "hot", "hurt", "if", "keep"],
+            
+            // Level 9: Third Grade Part 2 (15 words)
+            ["kind", "laugh", "light", "long", "much", "myself", "never", "only", "own", "pick", "seven", "shall", "show", "six", "small", "start", "ten", "today", "together", "try", "warm"],
+            
+            // Level 10: Common Nouns Part 1 (25 words)
+            ["apple", "baby", "back", "ball", "bear", "bed", "bell", "bird", "birthday", "boat", "box", "boy", "bread", "brother", "cake", "car", "cat", "chair", "chicken", "children", "Christmas", "coat", "corn", "cow", "day"],
+            
+            // Level 11: Common Nouns Part 2 (25 words)
+            ["dog", "doll", "door", "duck", "egg", "eye", "farm", "farmer", "father", "feet", "fire", "fish", "floor", "flower", "game", "garden", "girl", "goodbye", "grass", "ground", "hand", "head", "hill", "home", "horse"],
+            
+            // Level 12: Common Nouns Part 3 (25 words)
+            ["house", "kitty", "leg", "letter", "man", "men", "milk", "money", "morning", "mother", "name", "nest", "night", "paper", "party", "picture", "pig", "rabbit", "rain", "ring", "robin", "Santa Claus", "school", "seed", "sheep"],
+            
+            // Level 13: Common Nouns Part 4 (17 words)
+            ["shoe", "sister", "snow", "song", "squirrel", "stick", "street", "sun", "table", "thing", "time", "top", "toy", "tree", "watch", "water", "way", "wind", "window", "wood"]
+        ];
+        
+        let currentLevel = 0;
+        let currentWordIndex = 0;
+        let currentWord = '';
+        let userInput = '';
+        let fontSize = 'medium';
+        let startTime = 0;
+        let penalties = 0; // in seconds
+        let leaderboards = {};
+        
+        // Initialize the app
+        function init() {
+            generateLevelButtons();
+            document.addEventListener('keydown', handleKeyDown);
+            loadLeaderboards();
+        }
+        
+        // Load leaderboards from localStorage
+        function loadLeaderboards() {
+            const saved = JSON.parse(localStorage.getItem('sightWordLeaderboards') || '{}');
+            leaderboards = saved;
+        }
+        
+        // Save leaderboards to localStorage
+        function saveLeaderboards() {
+            localStorage.setItem('sightWordLeaderboards', JSON.stringify(leaderboards));
+        }
+        
+        // Generate level buttons
+        function generateLevelButtons() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < wordLevels.length; i++) {
+                const button = document.createElement('button');
+                button.className = 'level-button';
+                const difficulty = i < 3 ? 'beginner' : i < 6 ? 'easy' : i < 9 ? 'medium' : 'advanced';
+                button.textContent = `Level ${i + 1}: ${wordLevels[i].length} ${difficulty} words`;
+                button.onclick = () => startLevel(i);
+                grid.appendChild(button);
+            }
+        }
+        
+        // Start a level
+        function startLevel(levelIndex) {
+            currentLevel = levelIndex;
+            currentWordIndex = 0;
+            penalties = 0;
+            startTime = Date.now();
+            showScreen('drill');
+            document.getElementById('timerDisplay').style.display = 'block';
+            startTimer();
+            nextWord();
+        }
+        
+        // Start the timer
+        function startTimer() {
+            setInterval(updateTimer, 1000);
+        }
+        
+        // Update timer display
+        function updateTimer() {
+            if (document.getElementById('drillScreen').style.display === 'block') {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                document.getElementById('timeElapsed').textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (penalties > 0) {
+                    document.getElementById('penaltyDisplay').textContent = `Penalties: +${penalties}s`;
+                }
+            }
+        }
+        
+        // Show next word
+        function nextWord() {
+            if (currentWordIndex >= wordLevels[currentLevel].length) {
+                showCompletion();
+                return;
+            }
+            
+            currentWord = wordLevels[currentLevel][currentWordIndex];
+            userInput = '';
+            
+            updateProgress();
+            createLetterBoxes();
+            clearFeedback();
+            
+            // Automatically speak the new word after a short delay
+            setTimeout(() => {
+                speakWord();
+            }, 500);
+        }
+        
+        // Create letter boxes for current word
+        function createLetterBoxes() {
+            const container = document.getElementById('letterBoxes');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < currentWord.length; i++) {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                box.id = `box-${i}`;
+                box.onclick = () => focusInput();
+                container.appendChild(box);
+            }
+            
+            updateLetterBoxes();
+            setupMobileInput();
+        }
+        
+        // Setup mobile input handling
+        function setupMobileInput() {
+            const hiddenInput = document.getElementById('hiddenInput');
+            hiddenInput.value = '';
+            hiddenInput.oninput = handleMobileInput;
+            hiddenInput.onkeydown = handleMobileKeyDown;
+        }
+        
+        // Focus the hidden input to trigger mobile keyboard
+        function focusInput() {
+            const hiddenInput = document.getElementById('hiddenInput');
+            hiddenInput.focus();
+        }
+        
+        // Handle mobile input
+        function handleMobileInput(event) {
+            const input = event.target.value.toLowerCase();
+            userInput = input.slice(0, currentWord.length);
+            updateLetterBoxes();
+        }
+        
+        // Handle mobile keyboard events
+        function handleMobileKeyDown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                checkWord();
+            }
+        }
+        
+        // Clear input function for mobile
+        function clearInput() {
+            userInput = '';
+            document.getElementById('hiddenInput').value = '';
+            updateLetterBoxes();
+        }
+        
+        // Update letter boxes display
+        function updateLetterBoxes() {
+            for (let i = 0; i < currentWord.length; i++) {
+                const box = document.getElementById(`box-${i}`);
+                if (i < userInput.length) {
+                    box.textContent = userInput[i];
+                    box.className = 'letter-box filled';
+                } else if (i === userInput.length) {
+                    box.textContent = '';
+                    box.className = 'letter-box current';
+                } else {
+                    box.textContent = '';
+                    box.className = 'letter-box';
+                }
+            }
+        }
+        
+        // Update progress display
+        function updateProgress() {
+            const progress = document.getElementById('progress');
+            progress.textContent = `Level ${currentLevel + 1} - Word ${currentWordIndex + 1} of ${wordLevels[currentLevel].length}`;
+        }
+        
+        // Handle keyboard input
+        function handleKeyDown(event) {
+            if (document.getElementById('drillScreen').style.display !== 'block') {
+                return;
+            }
+            
+            event.preventDefault();
+            
+            switch (event.key) {
+                case ' ':
+                    speakWord();
+                    break;
+                case 'Enter':
+                    checkWord();
+                    break;
+                case 'Tab':
+                    giveHint();
+                    break;
+                case 'Backspace':
+                    if (userInput.length > 0) {
+                        userInput = userInput.slice(0, -1);
+                        updateLetterBoxes();
+                    }
+                    break;
+                default:
+                    if (event.key.length === 1 && /[a-zA-Z]/.test(event.key)) {
+                        if (userInput.length < currentWord.length) {
+                            userInput += event.key.toLowerCase();
+                            updateLetterBoxes();
+                        }
+                    }
+            }
+        }
+        
+        // Speak the current word
+        function speakWord() {
+            if ('speechSynthesis' in window) {
+                // Ensure voices are loaded
+                let voices = speechSynthesis.getVoices();
+                
+                // If voices aren't loaded yet, wait for them
+                if (voices.length === 0) {
+                    speechSynthesis.addEventListener('voiceschanged', () => {
+                        speakWordWithVoice();
+                    }, { once: true });
+                    return;
+                }
+                
+                speakWordWithVoice();
+            }
+        }
+        
+        // Helper function to speak with the correct voice
+        function speakWordWithVoice() {
+            const utterance = new SpeechSynthesisUtterance(currentWord);
+            
+            // Set the specific voice with fallbacks
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => voice.name === 'Google UK English Male') ||
+                                  voices.find(voice => voice.name === 'Daniel') ||
+                                  voices.find(voice => voice.name.includes('UK') && voice.gender === 'male') ||
+                                  voices.find(voice => voice.name.includes('British') && voice.gender === 'male') ||
+                                  voices.find(voice => voice.name === 'Google US English') ||
+                                  voices.find(voice => voice.lang.startsWith('en'));
+            
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+            
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            speechSynthesis.speak(utterance);
+        }
+        
+        // Give a hint (fill next letter)
+        function giveHint() {
+            if (userInput.length < currentWord.length) {
+                userInput += currentWord[userInput.length];
+                updateLetterBoxes();
+                penalties += 2; // 2 second penalty for hint
+                updateTimer();
+            }
+        }
+        
+        // Check if word is correct
+        function checkWord() {
+            const feedback = document.getElementById('feedback');
+            
+            if (userInput.toLowerCase() === currentWord.toLowerCase()) {
+                feedback.textContent = '✅';
+                feedback.style.color = '#28a745';
+                
+                setTimeout(() => {
+                    currentWordIndex++;
+                    nextWord();
+                }, 1500);
+            } else {
+                feedback.textContent = '❌';
+                feedback.style.color = '#dc3545';
+                penalties += 5; // 5 second penalty for wrong answer
+                updateTimer();
+                
+                setTimeout(() => {
+                    userInput = '';
+                    updateLetterBoxes();
+                    clearFeedback();
+                }, 1500);
+            }
+        }
+        
+        // Clear feedback
+        function clearFeedback() {
+            document.getElementById('feedback').textContent = '';
+        }
+        
+        // Show completion screen
+        function showCompletion() {
+            const totalTime = Math.floor((Date.now() - startTime) / 1000) + penalties;
+            const baseTime = Math.floor((Date.now() - startTime) / 1000);
+            
+            document.getElementById('levelCompleteTitle').textContent = `Level ${currentLevel + 1} Complete!`;
+            document.getElementById('finalTime').textContent = formatTime(totalTime);
+            
+            let breakdown = `Base Time: ${formatTime(baseTime)}`;
+            if (penalties > 0) {
+                breakdown += `<br>Penalties: +${penalties}s<br><strong>Final Time: ${formatTime(totalTime)}</strong>`;
+            }
+            document.getElementById('timeBreakdown').innerHTML = breakdown;
+            
+            showScreen('arcade');
+            document.getElementById('timerDisplay').style.display = 'none';
+            
+            // Focus first initial input
+            document.getElementById('initial1').focus();
+        }
+        
+        // Format time as MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Move to next initial input
+        function moveToNext(current, nextId) {
+            current.value = current.value.toUpperCase();
+            if (current.value && nextId) {
+                document.getElementById(nextId).focus();
+            }
+        }
+        
+        // Submit score to leaderboard
+        function submitScore() {
+            const initial1 = document.getElementById('initial1').value || 'A';
+            const initial2 = document.getElementById('initial2').value || 'A';
+            const initial3 = document.getElementById('initial3').value || 'A';
+            const initials = (initial1 + initial2 + initial3).toUpperCase();
+            
+            const totalTime = Math.floor((Date.now() - startTime) / 1000) + penalties;
+            
+            // Initialize leaderboard for this level if it doesn't exist
+            if (!leaderboards[currentLevel]) {
+                leaderboards[currentLevel] = [];
+            }
+            
+            // Add new score
+            leaderboards[currentLevel].push({
+                initials: initials,
+                time: totalTime,
+                date: new Date().toLocaleDateString()
+            });
+            
+            // Sort by time (fastest first) and keep top 10
+            leaderboards[currentLevel].sort((a, b) => a.time - b.time);
+            leaderboards[currentLevel] = leaderboards[currentLevel].slice(0, 10);
+            
+            saveLeaderboards();
+            goHome();
+        }
+        
+        // Restart current level
+        function restartLevel() {
+            startLevel(currentLevel);
+        }
+        
+        // Show leaderboards
+        function showLeaderboards() {
+            let content = '';
+            
+            for (let level = 0; level < wordLevels.length; level++) {
+                const levelScores = leaderboards[level] || [];
+                if (levelScores.length > 0) {
+                    content += `<div class="leaderboard-header">Level ${level + 1}</div>`;
+                    
+                    levelScores.forEach((score, index) => {
+                        const rank = index + 1;
+                        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+                        content += `
+                            <div class="leaderboard-entry">
+                                <span class="rank">${medal} #${rank}</span>
+                                <span>${score.initials}</span>
+                                <span>${formatTime(score.time)}</span>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            
+            if (!content) {
+                content = '<div style="text-align: center; padding: 40px; color: #6c757d;">No scores yet! Complete a level to get on the leaderboard!</div>';
+            }
+            
+            document.getElementById('leaderboardContent').innerHTML = content;
+            showScreen('leaderboard');
+        }
+        
+        // Hide leaderboards
+        function hideLeaderboards() {
+            showScreen('home');
+        }
+        
+        // Show different screens
+        function showScreen(screen) {
+            document.getElementById('homeScreen').style.display = screen === 'home' ? 'block' : 'none';
+            document.getElementById('drillScreen').style.display = screen === 'drill' ? 'block' : 'none';
+            document.getElementById('arcadeComplete').style.display = screen === 'arcade' ? 'block' : 'none';
+            document.getElementById('leaderboardScreen').style.display = screen === 'leaderboard' ? 'block' : 'none';
+        }
+        
+        // Go back to home
+        function goHome() {
+            showScreen('home');
+            document.getElementById('timerDisplay').style.display = 'none';
+        }
+        
+        // Toggle font size
+        function toggleFontSize() {
+            const sizes = ['small', 'medium', 'large'];
+            const currentIndex = sizes.indexOf(fontSize);
+            fontSize = sizes[(currentIndex + 1) % sizes.length];
+            
+            document.body.className = `font-${fontSize}`;
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
